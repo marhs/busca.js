@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<link rel='stylesheet' type='text/css' href="style.css" />
+
+	<title>Buscaminas.js</title>
+  <script type="text/javascript" src="aux.js"></script>
+  <script type="text/javascript" src="server.js"></script>
+	<script type="text/javascript">
+    window.onload = function() {
+			tablero.generaTablero(1, 10, 10);
+      cliente.generaTablero(10,10);
+		//	dibuja();
+		}
+		var i, j;
+		function dibuja(){
+			for(i=0;i<tablero.m; i++){
+				for(j=0; j<tablero.n; j++){
+					if(tablero.tableroMascara[i][j] == false) {
+						document.write('<a href="#" onclick="tablero.descubreMina('+i+','+j+'); dibuja();">X </a>');
+					} else {
+						document.write(tablero.tableroMinas[i][j] + ' ');
+					}
+
+				}
+				document.write('<br />');
+
+			}
+		}
+	</script>
+	
+</head>
+
+<body>
+<div id="busca" onload="pene();">
+ Jugando..
+</div>
+<div id="board">
+
+</div>
+</body>
+</html>

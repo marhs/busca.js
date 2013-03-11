@@ -1,0 +1,49 @@
+document {
+  font-family: monospace;
+}
+body {
+  font-family: monospace;
+}
+tr {
+  width: 30px;
+  height: 30px;
+}
+td {
+  padding: 0;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+#board {
+  border: 1px solid black;
+  border-spacing: 0px;
+}
+.casilla {
+  padding: 0;
+  margin: 0;
+  width: 25px;
+  height: 25px;
+  background-color: #999;
+  border-bottom: 4px solid #777;
+  border-right: 4px solid #777;
+  border-left: 4px solid #BBB;
+  border-top: 4px solid #BBB;
+}
+.casilla:active {
+  border-bottom: 4px solid #BBB;
+  border-right: 4px solid #BBB;
+  border-left: 4px solid #777;
+  border-top: 4px solid #777;
+}
+.casillaPressed {
+  padding: 0;
+  margin: 0;
+  width: 29px;
+  height: 29px;
+  background-color: #BBB;
+  border-bottom: 2px solid #BBB;
+  border-right: 2px solid #BBB;
+  border-left: 2px solid #777;
+  border-top: 2px solid #777;
+}
