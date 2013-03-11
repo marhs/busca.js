@@ -27,7 +27,7 @@ var cliente = {
 
   },
 
-  descubre : function(x,y)i {
+  descubre : function(x,y){
     tablero.click(x,y);
     this.relleno();
   },
