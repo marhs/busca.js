@@ -1,11 +1,70 @@
 /* TODO
  *  - Definir BIEN lo que devuelve click()
  *  - Cuando se gana, no permitir interactuar con el juego. 
- *  - No permitir al "cliente" acceder directamente a la matriz.
- *    * Hacer una funcion para ver si el acceso a la matriz de minas
- *      esta disponible en esa casilla (y devolver la casilla).
  */
 
+
+/*  Parte de Node.js
+ *
+ */
+
+// Iniciamos el servidor, escuchando en el 8080
+// Los sockets están iniciados. 
+var app = require('express')();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+server.listen(8080);
+
+
+app.get('/', function(req,res) {
+	res.sendfile(__dirname+'/buscaminas.html');
+});
+
+app.get('/style.css', function(req,res) {
+	res.sendfile(__dirname+'/style.css');
+});
+
+app.get('/aux.js', function(req,res) {
+	res.sendfile(__dirname+'/aux.js');
+});
+
+
+//  Manejo de eventos //
+
+// Conexión iniciada
+io.sockets.on('connection', function(socket) {
+
+	console.log("Jugador conectado");
+
+	socket.on('click', function(o) {
+		socket.emit('click', tablero.click(o.x,o.y));
+	});
+	
+	socket.on('mascara', function(o) {
+		socket.emit('mascara', tablero.tableroMascara[o.x][o.y]);
+	});
+	socket.on('getMina', function(x,y) {
+		socket.emit('getMina', tablero.getMina(x,y))
+	});
+
+	socket.on('creaTablero', function(o) {
+		tablero.generaTablero(o.minas,o.m,o.n);
+		if (tablero.tableroMinas[0][0] == 0) {
+			console.log("Tablero creado con " + o.minas + 'minas');
+		} else {
+			console.log("Error");
+		}
+	});
+	socket.on('boton', function(data) {
+		console.log("Boton recibido con: "+data);
+		socket.emit('prueba', {data:'data LOCO'});
+	});
+});	
+
+
+/*  Fin de Node.js
+ *
+ */
 var tablero = {
   numMinas : 0,
   n : 0,
@@ -34,7 +93,7 @@ var tablero = {
 			}
 		}
 	
-		//añadimos a tableroMinas los valores de las casillas
+		//añadimos a tableroMinas los valores dei las casillas
 		for(i = 0; i< this.numMinas; i++)
 		{
 			var x = Math.floor(Math.random()*n);
@@ -114,7 +173,7 @@ var tablero = {
         }
       }
     }
-    document.getElementById('busca').innerHTML = '<p>Derrota :(</p>';
+    // document.getElementById('busca').innerHTML = '<p>Derrota :(</p>';
     // detenerJuego()
   },
 
@@ -137,7 +196,7 @@ var tablero = {
 		}
     if((this.m *this.n)-cont == this.numMinas && this.juego >= 0) {
       this.juego = 1;
-      document.getElementById('busca').innerHTML = '<p>Victoria!</p>';
+      // document.getElementById('busca').innerHTML = '<p>Victoria!</p>';
     }
 	}
 
