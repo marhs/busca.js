@@ -5,6 +5,7 @@
 
 /* TODO
  * - Comentar funciones
+ * - Crear opcion de poner banderas  
  */
 
 var mina = '<img src="img/mina.png" />'

@@ -61,9 +61,11 @@ var tablero = {
 			}
 		}
 	},
+
 	compruebaMina : function(x, y) {
 		return this.tableroMinas[x][y] < 0;
 	},
+
 	click: function(x, y){
     /* Se llama a esta funcion cuando se hace click en una casilla, y se descubre lo
      * que hay abajo. Si es un cero, se comporta de manera recursiva. 
@@ -98,6 +100,7 @@ var tablero = {
 		}
 
 	},
+
   derrota : function () {
     if(this.juego == 0) {
       this.juego = -1;
@@ -114,10 +117,12 @@ var tablero = {
     document.getElementById('busca').innerHTML = '<p>Derrota :(</p>';
     // detenerJuego()
   },
+
   getMina : function(x,y) {
     if (tablero.tableroMascara[x][y]) return tablero.tableroMinas[x][y];
     else return null;
   },
+
 	victoria : function() {
   /* Se considera victoria si estan abiertos todos las casillas - numMinas
    * y no se ha abierto ninguna mina. 
