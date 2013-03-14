@@ -13,7 +13,7 @@
 var app = require('express')();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
-server.listen(8080);
+server.listen(1337);
 
 
 app.get('/', function(req,res) {
@@ -31,7 +31,7 @@ app.get('/*', function(req, res) {
 io.sockets.on('connection', function(socket) {
 
 	console.log("Jugador conectado");
-
+	tablero.generaTablero(10,10,10);
 	socket.on('click', function(o) {
 		io.sockets.emit('click', tablero.click(o.x,o.y));
 	});
@@ -57,7 +57,12 @@ io.sockets.on('connection', function(socket) {
 	});
 });	
 
-
+function enviarDerrota() {
+	io.sockets.emit('derrota');
+}
+function enviarVictoria() {
+	io.sockets.emit('victoria');
+}
 /*  Fin de Node.js
  *
  */
@@ -138,6 +143,7 @@ var tablero = {
       //this.derrota();
 			console.log('Click: ['+x+','+y+',-1]');
 			res.push([x,y,-1]);
+			this.derrota();
       // Llamar a la funcion derrota()
 			// Devolver una lista de minas
     } else if(this.tableroMinas[x][y] == 0){
@@ -158,10 +164,10 @@ var tablero = {
 						}
 					}
 				}
-		    //this.victoria();	
+				this.victoria();
 		} else {
 			this.tableroMascara[x][y] = true;
-      //this.victoria();
+      this.victoria();
 			console.log('Click: ['+x+','+y+',0]');
 			res.push([x,y,this.tableroMinas[x][y]]);
 		}
@@ -183,7 +189,7 @@ var tablero = {
       }
     }
     // document.getElementById('busca').innerHTML = '<p>Derrota :(</p>';
-    // detenerJuego()
+    enviarDerrota();
   },
 
   getMina : function(x,y) {
@@ -205,6 +211,7 @@ var tablero = {
 		}
     if((this.m *this.n)-cont == this.numMinas && this.juego >= 0) {
       this.juego = 1;
+			enviarVictoria();
       // document.getElementById('busca').innerHTML = '<p>Victoria!</p>';
     }
 	}

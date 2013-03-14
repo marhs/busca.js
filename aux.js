@@ -34,13 +34,17 @@ function mascara(x,y) {
   return socket.on('mascara', function(data) {
 		return data;
 	});
-	
 }
+socket.on('victoria', function() {
+	document.getElementById('busca').innerHTML = '<p> Victoria :D </p>';
+});
+socket.on('derrota', function() {
+	document.getElementById('busca').innerHTML = '<p> Derrota :( </p>';
+});
 /* Fin de node.js
  *
  */
 function inicio() {
-	creaTablero(10, 10, 10);
 	cliente.generaTablero(10,10);
 }
 var mina = '<img src="img/mina.png" />'
