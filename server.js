@@ -125,17 +125,25 @@ var tablero = {
 		return this.tableroMinas[x][y] < 0;
 	},
 
-	click: function(x, y){
+	click: function(x, y, r){
     /* Se llama a esta funcion cuando se hace click en una casilla, y se descubre lo
      * que hay abajo. Si es un cero, se comporta de manera recursiva. 
      * 
      */
-    
-    // Si existe una mina. 
+
+    if(r==null) {
+			res = new Array();
+		} else {
+			res = r;
+		}
+		    // Si existe una mina. 
 		if(this.compruebaMina(x,y)) { 
       this.tableroMascara[x][y] = true;
-      this.derrota();
-      return -1;
+      //this.derrota();
+			console.log('Click: ['+x+','+y+',-1]');
+			res.push([x,y,-1]);
+      // Llamar a la funcion derrota()
+			// Devolver una lista de minas
     } else if(this.tableroMinas[x][y] == 0){
 			this.tableroMascara[x][y] = true;
 		 	var t;
@@ -145,18 +153,23 @@ var tablero = {
 				for(k = -1;k <= 1; k++)
 				{
 					if( x+t < this.n && y+k < this.m && x+t > -1 && y+k > -1 && this.tableroMascara[x+t][y+k] == false){
-								this.click(x+t,y+k); 
+							
+							var mina = [x,y,0];
+							res.push(mina);	
+							console.log('Click: ['+x+','+y+',0]');
+							this.click(x+t,y+k,res); 
 
 						}
 					}
 				}
-		    this.victoria();	
-				return 1;
+		    //this.victoria();	
 		} else {
 			this.tableroMascara[x][y] = true;
-      this.victoria();
-			return 0;
+      //this.victoria();
+			console.log('Click: ['+x+','+y+',0]');
+			res.push([x,y,this.tableroMinas[x][y]]);
 		}
+		return res;
 
 	},
 

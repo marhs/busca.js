@@ -17,6 +17,7 @@ var socket = io.connect('http://localhost');
 
 socket.on('click', function(data) {
 	console.log('Resultado de click: ' + data);
+	cliente.relleno(data);
 });
 socket.on('mascara', function(data) {
 	console.log('Resultado de mascara: ' + data);
@@ -75,11 +76,11 @@ var cliente = {
     this.relleno();
   },
 
-  actualizaCasilla : function(x,y,tipo) {
+  actualizaCasilla : function(x,y,value) {
   // Pinta una casilla con un número o una mina.
 		if(!this.tab[x][y]) {
 			document.getElementById(''+x+'.'+y).setAttribute('class','casillaPressed');
-			res = getMina(x,y)
+			res = value;
 			if (res > 0) { // Numero
 				document.getElementById(''+x+'.'+y).innerHTML = res;
 			} 
@@ -90,15 +91,14 @@ var cliente = {
 		}
 	},
 
-  relleno : function() {
-  /* Recorre el tablero entero y actualiza las casillas que estan abiertas.*/
-
-    var i,j;
-    for(i=0;i<this.m;i++) {
-      for(j=0;j<this.n;j++) {
-        if(mascara(x,y)) this.actualizaCasilla(i,j,0);
-      }
-    }
+  relleno : function(list) {
+	/* Actualiza la lista de casillas que recibe del servidor */	
+    if (list == null) return 0;
+		var i;
+		for(i=0;i<list.length;i++) {
+			var c = list[i];
+			this.actualizaCasilla(c[0], c[1], c[2]);
+		}
   }
 }
 
