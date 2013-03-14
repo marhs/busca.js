@@ -20,12 +20,8 @@ app.get('/', function(req,res) {
 	res.sendfile(__dirname+'/buscaminas.html');
 });
 
-app.get('/style.css', function(req,res) {
-	res.sendfile(__dirname+'/style.css');
-});
-
-app.get('/aux.js', function(req,res) {
-	res.sendfile(__dirname+'/aux.js');
+app.get('/*', function(req, res) {
+	res.sendfile(__dirname+'/'+req.params[0]);
 });
 
 
@@ -37,7 +33,7 @@ io.sockets.on('connection', function(socket) {
 	console.log("Jugador conectado");
 
 	socket.on('click', function(o) {
-		socket.emit('click', tablero.click(o.x,o.y));
+		io.sockets.emit('click', tablero.click(o.x,o.y));
 	});
 	
 	socket.on('mascara', function(o) {
