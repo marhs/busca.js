@@ -6,6 +6,9 @@
 /* TODO
  * - Comentar funciones
  * - Crear opcion de poner banderas  
+ *   Hay que hacer click en Jugar ANTES de empezar a jugar, o si no peta. 
+ *     O hacerlo no-clickable mientras no se pueda jugar.
+ *   Hacer que el tablero sea no clickable para determinadas cosas. 
  */
 
 
@@ -13,7 +16,7 @@
  *
  */
 
-var socket = io.connect('http://localhost');
+var socket = io.connect('http://localhost:1337');
 
 socket.on('click', function(data) {
 	console.log('Resultado de click: ' + data);
@@ -24,16 +27,11 @@ socket.on('mascara', function(data) {
 });
 function creaTablero(minas, m,n) {
 	socket.emit('creaTablero', {minas:minas, m:m, n:n});
-	console.log('Tablero señalado con: ' + minas +' '+m+n);
+	console.log("Tablero creado");
 }
 function click(x,y) {
+	// Transmite el click en (x,y)
 	socket.emit('click', {x:x,y:y});
-}
-function mascara(x,y) {
-	socket.emit('mascara', {x:x,y:y});
-  return socket.on('mascara', function(data) {
-		return data;
-	});
 }
 socket.on('victoria', function() {
 	document.getElementById('busca').innerHTML = '<p> Victoria :D </p>';
@@ -45,6 +43,8 @@ socket.on('derrota', function() {
  *
  */
 function inicio() {
+	console.log("Iniciando partida");
+	creaTablero(10, 10, 10);
 	cliente.generaTablero(10,10);
 }
 var mina = '<img src="img/mina.png" />'
@@ -66,7 +66,6 @@ var cliente = {
       for(j=0; j<n; j++) {
 				this.tab[i][j] = false;
         text += '<td><a href="#" onClick="cliente.descubre('+i+','+j+')"> <div class="casilla" id="'+i+'.'+j+'" > </div></a></td>\n';
-        // text += '</div></td>';
        }
       text += '</tr>\n';
     } 

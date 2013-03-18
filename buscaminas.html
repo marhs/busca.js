@@ -15,18 +15,30 @@
   <script type="text/javascript" src="aux.js"></script>
 	<!--<script type="text/javascript" src="server.js"></scrip-->
 	<script type="text/javascript">
-    window.onload = inicio();
+		window.onload = function() {
+			cliente.generaTablero(10,10);
+		};
 	</script>
 	
 </head>
 
 <body>
 	<div id="body">
+		<div id="header">
+			<h1> Minesweeper </h1>
+		</div>
 		<div id="busca">
-			<a href="#" onClick="cliente.generaTablero(10,10)" >Jugando..</a>
+			<a href="#" onClick="inicio()" >Jugar</a>
 		</div>
 		<div id="board">
 			<!-- Contenido del buscaminas -->
+		</div>
+		<div id="players">
+			<h3> Jugadores </h3>
+			<ul>
+				<li> Jugador 1 </li>
+				<li> Jugador 2 </li>
+			</ul>
 		</div>
 </div>
 </body>

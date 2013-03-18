@@ -15,9 +15,22 @@ a {
   text-decoration: none;
   color: black;
 }
+#body {
+	margin: 0 auto 0 auto;
+	width: 700px;
+	height: 1000px;
+	background-color: #EEE;
+}
 #board {
+	width: 332px;
   border: 1px solid black;
   border-spacing: 0px;
+	float: left;
+}
+#players {
+	float: right;
+	width: 350px;
+	background-color: #DDD;
 }
 .casilla {
   padding: 0;

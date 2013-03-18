@@ -1,11 +1,9 @@
 /* TODO
- *  - Definir BIEN lo que devuelve click()
  *  - Cuando se gana, no permitir interactuar con el juego. 
  */
 
 
 /*  Parte de Node.js
- *
  */
 
 // Iniciamos el servidor, escuchando en el 8080
@@ -31,7 +29,6 @@ app.get('/*', function(req, res) {
 io.sockets.on('connection', function(socket) {
 
 	console.log("Jugador conectado");
-	tablero.generaTablero(10,10,10);
 	socket.on('click', function(o) {
 		io.sockets.emit('click', tablero.click(o.x,o.y));
 	});
@@ -51,21 +48,25 @@ io.sockets.on('connection', function(socket) {
 			console.log("Error");
 		}
 	});
+	
 	socket.on('boton', function(data) {
 		console.log("Boton recibido con: "+data);
 		socket.emit('prueba', {data:'data LOCO'});
 	});
 });	
 
-function enviarDerrota() {
-	io.sockets.emit('derrota');
+// No
+function enviarFin(estado) {
+	if (estado == false) {
+		io.sockets.emit('derrota');
+	} else if (estado == true) {
+		io.sockets.emit('victoria');
+	}
 }
-function enviarVictoria() {
-	io.sockets.emit('victoria');
-}
+
 /*  Fin de Node.js
- *
  */
+
 var tablero = {
   numMinas : 0,
   n : 0,
@@ -75,6 +76,7 @@ var tablero = {
 	tableroMascara : new Array(),
 	
 	generaTablero : function(nminas,n,m) {
+		console.log("Tablero generado");
 		var i;
 		var j;
 		this.numMinas = nminas;
@@ -176,6 +178,7 @@ var tablero = {
 	},
 
   derrota : function () {
+	// Comprueba si el juego ha terminado. En ese caso, manda la señal fin
     if(this.juego == 0) {
       this.juego = -1;
       // TODO Hacer que se muestren todas las minas del tablero. 
@@ -188,19 +191,14 @@ var tablero = {
         }
       }
     }
-    // document.getElementById('busca').innerHTML = '<p>Derrota :(</p>';
-    enviarDerrota();
-  },
-
-  getMina : function(x,y) {
-    if (tablero.tableroMascara[x][y]) return tablero.tableroMinas[x][y];
-    else return null;
+    enviarFin(false);
   },
 
 	victoria : function() {
   /* Se considera victoria si estan abiertos todos las casillas - numMinas
    * y no se ha abierto ninguna mina. 
    * Suponemos que si se abre una mina el juego termina <- pareado. 
+	 * Si se termina el juego con victoria, se envia la señal fin.
    */
     var i,j,cont;
     cont = 0;
@@ -211,14 +209,17 @@ var tablero = {
 		}
     if((this.m *this.n)-cont == this.numMinas && this.juego >= 0) {
       this.juego = 1;
-			enviarVictoria();
-      // document.getElementById('busca').innerHTML = '<p>Victoria!</p>';
+			enviarFin(true);
     }
 	}
 
 };
 
 var jugador = {
+	/* No usado por ahora, se definirán una serie de jugadores dentro de un juego
+	 * y esta será su clase. 
+	 * TODO A implementar
+	 */
 	id : 0,
 	puntuacion : 0,
 	generaJugador : function(id){
